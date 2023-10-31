@@ -1,0 +1,7 @@
+Passo 01: 
+ -- Instalar e extrair o zip javafx sdk na pasta lib, download no link - https://gluonhq.com/products/javafx/
+
+Passo 02:
+ -- na pasta .vscode no arquivo launch.json preencher o campo "vmArgs": com o seu caminho. 
+
+obs: o campo "projectName": foi gerado automaticamente pela IDE, talvez precise ser alterado no seu ambiente de desenvolvimento.

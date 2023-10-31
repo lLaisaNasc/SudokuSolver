@@ -1,0 +1,9 @@
+{
+  "java.project.sourcePaths": [
+    "src",
+    "lib/javafx-sdk-21.0.1",
+    "fonts"
+  ],
+  "java.project.outputPath": "bin",
+  "java.project.referencedLibraries": ["lib/**/*.jar"],
+}
