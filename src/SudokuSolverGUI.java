@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -22,16 +23,17 @@ public class SudokuSolverGUI extends Application {
     public void start(Stage primaryStage) {
         VBox vbox = new VBox(40);
         vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
+
         GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
-        vbox.setPadding(new Insets(10, 10, 10, 10));
         root.setHgap(4);
         root.setVgap(4);
 
         for (int i = 0; i < gameBoard.getSize(); i++) {
             for (int j = 0; j < gameBoard.getSize(); j++) {
-                Button btn = new Button();
 
+                Button btn = new Button();
                 btn.setPrefWidth(50);
                 btn.setPrefHeight(50);
 
@@ -43,11 +45,20 @@ public class SudokuSolverGUI extends Application {
 
                 btn.setOnAction(e -> {
                     if (selectedNumber != null) {
-                        btn.setText(selectedNumber);
-                        String oldStyle = btn.getStyle();
-                        btn.setStyle(oldStyle + "-fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-size: 20px;");
+                        int num = Integer.parseInt(selectedNumber);
+                        int row = GridPane.getRowIndex(btn);
+                        int col = GridPane.getColumnIndex(btn);
+
+                        if (gameBoard.insertNumber(row, col, num)) {
+                            btn.setText(selectedNumber);
+                            btn.setStyle(btn.getStyle()
+                                    + "-fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-size: 20px;");
+                        } else {
+                            System.out.println("Número em uma posição inválida!");
+                        }
                     }
                 });
+
                 root.add(btn, j, i);
             }
         }
@@ -56,31 +67,56 @@ public class SudokuSolverGUI extends Application {
         numberPane.setAlignment(Pos.CENTER);
         numberPane.setHgap(5);
 
-        GridPane buttonPane = new GridPane();
-        buttonPane.setAlignment(Pos.CENTER);
-        buttonPane.setHgap(5);
+        GridPane menuPane = new GridPane();
+        menuPane.setAlignment(Pos.CENTER);
+        menuPane.setHgap(5);
 
         ImageView solveIcon = new ImageView(new Image("/img/solve.png"));
         solveIcon.setFitWidth(40);
         solveIcon.setFitHeight(40);
-        Button solveButton = new Button("Solve Puzzle", solveIcon);
-        solveButton.setStyle("-fx-background-color: #000");
+
+        Button solveButton = new Button(" Solve Puzzle ", solveIcon);
+        solveButton.setStyle(
+                "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
 
         ImageView undoIcon = new ImageView(new Image("/img/undo.png"));
         undoIcon.setFitWidth(40);
         undoIcon.setFitHeight(40);
-        Button undoButton = new Button("Undo", undoIcon);
-        undoButton.setStyle("-fx-background-color: #000");
+
+        Button undoButton = new Button(" Undo ", undoIcon);
+        undoButton.setStyle(
+                "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
 
         ImageView resetIcon = new ImageView(new Image("/img/reset.png"));
         resetIcon.setFitWidth(40);
         resetIcon.setFitHeight(40);
-        Button resetButton = new Button("Reset", resetIcon);
-        resetButton.setStyle("-fx-background-color: #000");
 
-        buttonPane.add(solveButton, 0, 0);
-        buttonPane.add(undoButton, 1, 0);
-        buttonPane.add(resetButton, 2, 0);
+        Button resetButton = new Button(" Reset ", resetIcon);
+        resetButton.setStyle(
+                "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
+        resetButton.setOnAction(e -> {
+            gameBoard.resetBoard();
+
+            for (Node child : root.getChildren()) {
+                if (child instanceof Button) {
+                    Button button = (Button) child;
+                    button.setText("");
+                }
+            }
+        });
+
+        ImageView randomIcon = new ImageView(new Image("/img/random.png"));
+        resetIcon.setFitWidth(40);
+        resetIcon.setFitHeight(40);
+
+        Button randomButton = new Button(" Random ", randomIcon);
+        randomButton.setStyle(
+                "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
+
+        menuPane.add(solveButton, 0, 0);
+        menuPane.add(undoButton, 1, 0);
+        menuPane.add(randomButton, 2, 0);
+        menuPane.add(resetButton, 3, 0);
 
         for (int i = 1; i <= 9; i++) {
             Button numberButton = new Button(Integer.toString(i));
@@ -95,9 +131,11 @@ public class SudokuSolverGUI extends Application {
             });
         }
 
-        vbox.getChildren().addAll(root, buttonPane, numberPane);
-        Scene scene = new Scene(vbox, 600, 700);
+        vbox.getChildren().addAll(root, numberPane, menuPane);
+
+        Scene scene = new Scene(vbox, 630, 700);
         scene.getRoot().setStyle("-fx-background-color: #000;");
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Sudoku Solver");
         primaryStage.show();

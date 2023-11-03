@@ -11,14 +11,41 @@ public class GameBoard {
         return this.size;
     }
 
-    public int getBoard(int row, int col) {
-        return board[row][col];
+    private boolean isValid(int row, int col, int num) {
+        for (int i = 0; i < size; i++) {
+
+            if (board[row][i] == num)
+                return false;
+            if (board[i][col] == num)
+                return false;
+            if (board[row - row % 3 + i / 3][col - col % 3 + i % 3] == num)
+                return false;
+        }
+        return true;
     }
 
-    // função de inserir numeros no limite certo linhas e colunas
-    //função reset
-    // função desfazer
-    // função solve
-    //....
+    public boolean insertNumber(int row, int col, int num) {
+        if (isValid(row, col, num)) {
+            board[row][col] = num;
+            return true;
+        }
+        return false;
+    }
+
+    public void resetBoard(){
+        board = new int[size][size];
+    }
+
+    public void undoBoard(){
+        //padrão de projeto comportamental - Memento
+    }
+
+    public void solvePuzzle(){
+        //TO DO
+    }
+
+    //tratamento de casos sem solução
+    //gerar gameboard aleatório para resolução do usuário
+
 
 }
