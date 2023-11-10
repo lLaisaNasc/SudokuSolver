@@ -15,6 +15,18 @@ public class SudokuSolverGUI extends Application {
     GameBoard gameBoard = new GameBoard();
     private String selectedNumber = null;
 
+    private void updateBoard(GridPane root) { // -- "reseta" a interface gráfica ---
+        for (Node child : root.getChildren()) {
+            if (child instanceof Button) {
+                Button button = (Button) child;
+                int row = GridPane.getRowIndex(button);
+                int col = GridPane.getColumnIndex(button);
+                int num = gameBoard.getNumberAt(row, col);
+                button.setText(num == 0 ? "" : Integer.toString(num));
+            }
+        }
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -30,7 +42,8 @@ public class SudokuSolverGUI extends Application {
         root.setHgap(4);
         root.setVgap(4);
 
-        for (int i = 0; i < gameBoard.getSize(); i++) {
+        for (int i = 0; i < gameBoard.getSize(); i++) { // -- Faz com que cada posição no tabuleiro seja um botão e
+                                                        // define o layout --
             for (int j = 0; j < gameBoard.getSize(); j++) {
 
                 Button btn = new Button();
@@ -43,7 +56,9 @@ public class SudokuSolverGUI extends Application {
                     btn.setStyle("-fx-background-color:  #1e202e;");
                 }
 
-                btn.setOnAction(e -> {
+                btn.setStyle(btn.getStyle() + "-fx-text-fill: #399; -fx-font-weight: bold; -fx-font-size: 20px;");
+
+                btn.setOnAction(e -> { // -- Insere o número do botao selecionado no tabuleiro --
                     if (selectedNumber != null) {
                         int num = Integer.parseInt(selectedNumber);
                         int row = GridPane.getRowIndex(btn);
@@ -67,6 +82,8 @@ public class SudokuSolverGUI extends Application {
         numberPane.setAlignment(Pos.CENTER);
         numberPane.setHgap(5);
 
+        // --- Botões do menu com imagens sendo os ícone e define o layout
+
         GridPane menuPane = new GridPane();
         menuPane.setAlignment(Pos.CENTER);
         menuPane.setHgap(5);
@@ -86,6 +103,10 @@ public class SudokuSolverGUI extends Application {
         Button undoButton = new Button(" Undo ", undoIcon);
         undoButton.setStyle(
                 "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
+        undoButton.setOnAction(e -> {
+            gameBoard.undoBoard();
+            updateBoard(root);
+        });
 
         ImageView resetIcon = new ImageView(new Image("/img/reset.png"));
         resetIcon.setFitWidth(40);
@@ -112,13 +133,17 @@ public class SudokuSolverGUI extends Application {
         Button randomButton = new Button(" Random ", randomIcon);
         randomButton.setStyle(
                 "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
+        randomButton.setOnAction(e -> {
+            gameBoard.randomPuzzle();
+            updateBoard(root);
+        });
 
         menuPane.add(solveButton, 0, 0);
         menuPane.add(undoButton, 1, 0);
         menuPane.add(randomButton, 2, 0);
         menuPane.add(resetButton, 3, 0);
 
-        for (int i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 9; i++) { // -- cria os botões dos números e define o layout --
             Button numberButton = new Button(Integer.toString(i));
             numberButton.setPrefWidth(40);
             numberButton.setPrefHeight(40);
