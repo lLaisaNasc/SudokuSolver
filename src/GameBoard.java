@@ -66,32 +66,45 @@ public class GameBoard {
 
     // -- tratamento de casos sem solução ---
 
-    public void solvePuzzle() {
-        // TO DO
+    public boolean solvePuzzle() {
+        for (int row = 0; row < size; row++) {
+            for (int column = 0; column < size; column++) {
+                if (board[row][column] == 0) {
+                    for (int numberToTry = 1; numberToTry <= size; numberToTry++) {
+                        if (isValid(row, column, numberToTry)) {
+                            board[row][column] = numberToTry;
+
+                            if (solvePuzzle()) {
+                                return true;
+                            } else {
+                                board[row][column] = 0;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void randomPuzzle() {
-        Random rand = new Random();
+
         resetBoard();
+        solvePuzzle();
 
-        int numbersToFill = rand.nextInt(6) + 28;
+        Random rand = new Random();
+        int numbersToRemove = rand.nextInt(6) + 28;
 
-        for (int i = 0; i < numbersToFill; i++) {
-            int row, col, num;
+        for (int i = 0; i < numbersToRemove; i++) {
+            int row, col;
             do {
                 row = rand.nextInt(size);
                 col = rand.nextInt(size);
-                num = rand.nextInt(size) + 1;
-            } while (!isValid(row, col, num) || board[row][col] != 0);
+            } while (board[row][col] == 0);
 
-            board[row][col] = num;
+            board[row][col] = 0;
         }
 
     }
-
-    // -- para quando o usuário for no aleatório e querer resolver o puzzle dado --
-    public void Winner() {
-
-    }
-
 }

@@ -4,10 +4,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class SudokuSolverGUI extends Application {
@@ -25,6 +27,24 @@ public class SudokuSolverGUI extends Application {
                 button.setText(num == 0 ? "" : Integer.toString(num));
             }
         }
+    }
+
+    public void winnerBoard() {
+        Stage winnerStage = new Stage();
+        winnerStage.initModality(Modality.APPLICATION_MODAL); // Para tornar a janela modal
+
+        Label winnerLabel = new Label("Congratulations, The Puzzle has been solved!");
+        winnerLabel.setStyle("-fx-text-fill: #399; -fx-font-weight: bold; -fx-font-size: 20px;");
+
+        VBox layout = new VBox(10);
+        layout.getChildren().add(winnerLabel);
+        layout.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout, 500, 100);
+        winnerStage.setScene(scene);
+        winnerStage.setTitle("Winner!");
+        winnerStage.showAndWait();
+
     }
 
     public static void main(String[] args) {
@@ -95,6 +115,15 @@ public class SudokuSolverGUI extends Application {
         Button solveButton = new Button(" Solve Puzzle ", solveIcon);
         solveButton.setStyle(
                 "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
+        solveButton.setOnAction(e -> {
+            gameBoard.solvePuzzle();
+            if (gameBoard.solvePuzzle()) {
+                updateBoard(root);
+                winnerBoard();
+            } else {
+                System.out.println("Puzzle sem solução");
+            }
+        });
 
         ImageView undoIcon = new ImageView(new Image("/img/undo.png"));
         undoIcon.setFitWidth(40);
