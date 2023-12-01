@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class GameBoard {
@@ -64,27 +67,35 @@ public class GameBoard {
         return -1;
     }
 
-    // -- tratamento de casos sem solução ---
-
     public boolean solvePuzzle() {
+        List<Integer> numbersToTry = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        Collections.shuffle(numbersToTry);
+
+        List<int[]> emptyCells = new ArrayList<>();
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
                 if (board[row][column] == 0) {
-                    for (int numberToTry = 1; numberToTry <= size; numberToTry++) {
-                        if (isValid(row, column, numberToTry)) {
-                            board[row][column] = numberToTry;
-
-                            if (solvePuzzle()) {
-                                return true;
-                            } else {
-                                board[row][column] = 0;
-                            }
-                        }
-                    }
-                    return false;
+                    emptyCells.add(new int[] { row, column });
                 }
             }
         }
+
+        for (int[] cell : emptyCells) {
+            int row = cell[0];
+            int column = cell[1];
+            for (int numberToTry : numbersToTry) {
+                if (isValid(row, column, numberToTry)) {
+                    board[row][column] = numberToTry;
+                    if (solvePuzzle()) {
+                        return true;
+                    } else {
+                        board[row][column] = 0;
+                    }
+                }
+            }
+            return false;
+        }
+
         return true;
     }
 
