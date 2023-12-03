@@ -5,8 +5,8 @@
       "name": "SudokuSolverGUI",
       "request": "launch",
       "mainClass": "SudokuSolverGUI",
-      "projectName": "SudokuSolver_6f37c7ff",
-      "vmArgs": "--module-path C:\\Users\\seu caminho ate a pasta lib\\lib\\javafx-sdk-21.0.1\\lib --add-modules javafx.controls,javafx.graphics,javafx.fxml"
+      "projectName": "SudokuSolver_e87d7262",
+      "vmArgs": "--module-path C:\\SudokuSolver\\lib\\javafx-sdk-21.0.1\\lib --add-modules javafx.controls,javafx.graphics,javafx.fxml"
     },
   ]
 }

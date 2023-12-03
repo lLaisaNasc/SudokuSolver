@@ -3,55 +3,67 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+// A classe GameBoard é responsável por gerenciar o tabuleiro do jogo.
 public class GameBoard {
 
+    // O tamanho do tabuleiro do jogo.
     private int size = 9;
+    // O tabuleiro do jogo.
     private int[][] board;
+    // O objeto Caregiver que armazena os estados anteriores do tabuleiro do jogo.
     Caregiver caregiver;
 
+    // O construtor da classe inicializa o tabuleiro do jogo e o objeto Caregiver.
     public GameBoard() {
         board = new int[size][size];
         caregiver = new Caregiver();
     }
 
+    // Este método retorna o tamanho do tabuleiro do jogo.
     public int getSize() {
         return this.size;
     }
 
-    private boolean isValid(int row, int col, int num) {
+    // Este método verifica se um número pode ser inserido em uma posição específica no tabuleiro do jogo.
+    public boolean isValid(int row, int col, int num) {
         for (int i = 0; i < size; i++) {
-
+            // Verifica se o número já existe na linha ou coluna.
             if (board[row][i] == num)
                 return false;
             if (board[i][col] == num)
                 return false;
-            if (board[row - row % 3 + i / 3][col - col % 3 + i % 3] == num) // verifica se é válido nos blocos 3x3
+            // Verifica se o número já existe no bloco 3x3.
+            if (board[row - row % 3 + i / 3][col - col % 3 + i % 3] == num)
                 return false;
         }
         return true;
     }
 
+    // Este método insere um número em uma posição específica no tabuleiro do jogo.
     public boolean insertNumber(int row, int col, int num) {
-
+        // Verifica se o número pode ser inserido na posição.
         if (isValid(row, col, num)) {
-            caregiver.addMemento(save()); // salva no "cuidador" antes de colocar no tabuleiro
+            // Salva o estado atual do tabuleiro do jogo antes de inserir o número.
+            caregiver.addMemento(save());
+            // Insere o número no tabuleiro do jogo.
             board[row][col] = num;
             return true;
         }
         return false;
     }
 
+    // Este método reseta o tabuleiro do jogo.
     public void resetBoard() {
         board = new int[size][size];
         caregiver = new Caregiver();
     }
 
-    // -- padrão de projeto comportamental - Memento --
-
+    // Este método salva o estado atual do tabuleiro do jogo.
     public GameBoardMemento save() {
         return new GameBoardMemento(board);
     }
 
+    // Este método desfaz a última ação no tabuleiro do jogo.
     public void undoBoard() {
         GameBoardMemento memento = caregiver.getLastMemento();
         if (memento != null) {
@@ -59,18 +71,21 @@ public class GameBoard {
         }
     }
 
+    // Este método retorna o número em uma posição específica no tabuleiro do jogo.
     public int getNumberAt(int row, int col) {
-        if (row >= 0 && row < size && col >= 0 && col < size) { // retorna a posição exata no tabuleiro para
-                                                                // posteriormente atualizar a interface gráfica
+        if (row >= 0 && row < size && col >= 0 && col < size) {
             return board[row][col];
         }
         return -1;
     }
 
+    // Este método resolve o quebra-cabeça.
     public boolean solvePuzzle() {
+        // Lista de números a serem tentados em cada posição vazia.
         List<Integer> numbersToTry = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
         Collections.shuffle(numbersToTry);
 
+        // Lista de células vazias no tabuleiro do jogo.
         List<int[]> emptyCells = new ArrayList<>();
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
@@ -80,6 +95,7 @@ public class GameBoard {
             }
         }
 
+        // Tenta preencher cada célula vazia com um número válido.
         for (int[] cell : emptyCells) {
             int row = cell[0];
             int column = cell[1];
@@ -99,14 +115,16 @@ public class GameBoard {
         return true;
     }
 
+    // Este método gera um quebra-cabeça aleatório.
     public void randomPuzzle() {
-
+        // Reseta o tabuleiro do jogo.
         resetBoard();
+        // Resolve o quebra-cabeça.
         solvePuzzle();
 
+        // Remove alguns números do tabuleiro do jogo para criar o quebra-cabeça.
         Random rand = new Random();
         int numbersToRemove = rand.nextInt(6) + 28;
-
         for (int i = 0; i < numbersToRemove; i++) {
             int row, col;
             do {
@@ -116,6 +134,5 @@ public class GameBoard {
 
             board[row][col] = 0;
         }
-
     }
 }
