@@ -1,4 +1,5 @@
-import javafx.application.Application;
+package interfaces;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -11,9 +12,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import classes.*;
 
 // A classe SudokuSolverGUI é responsável por criar a interface gráfica do usuário para o jogo de Sudoku.
-public class SudokuSolverGUI extends Application {
+public class SudokuSolverGUI {
 
     // O tabuleiro do jogo.
     GameBoard gameBoard = new GameBoard();
@@ -115,9 +117,12 @@ public class SudokuSolverGUI extends Application {
         winnerStage.showAndWait();
     }
 
-    // O método start é chamado quando a aplicação é iniciada.
-    @Override
-    public void start(Stage primaryStage) {
+    
+
+    
+    public void Jogar(int opcao) {
+        Stage primaryStage = new Stage();
+
         // Cria um VBox para conter todos os elementos da interface gráfica.
         VBox vbox = new VBox(40);
         vbox.setAlignment(Pos.CENTER);
@@ -259,10 +264,29 @@ public class SudokuSolverGUI extends Application {
             }
         });
 
-        menuPane.add(solveButton, 0, 0);
-        menuPane.add(undoButton, 1, 0);
-        menuPane.add(randomButton, 2, 0);
-        menuPane.add(resetButton, 3, 0);
+        if(opcao == 1){
+           menuPane.add(solveButton, 0, 0);
+            menuPane.add(undoButton, 1, 0);
+            menuPane.add(resetButton, 2, 0); 
+            // Define o título do palco principal.
+            primaryStage.setTitle("Sudoku Solver");
+        }else if(opcao == 2){
+            menuPane.add(undoButton, 1, 0);
+            menuPane.add(randomButton, 0, 0);
+            menuPane.add(resetButton, 2, 0);
+            // Define o título do palco principal.
+            primaryStage.setTitle("Random");
+            gameBoard.randomPuzzle();
+            updateBoard(root);
+
+            // Limpar o destaque da célula selecionada
+            if (selectedRow != -1 && selectedColumn != -1) {
+                clearCellHighlight(root, selectedRow, selectedColumn);
+                selectedRow = -1;
+                selectedColumn = -1;
+            }
+        }
+        
 
         for (int i = 1; i <= 9; i++) {
             Button numberButton = new Button(Integer.toString(i));
@@ -300,8 +324,7 @@ public class SudokuSolverGUI extends Application {
 
         // Define a cena para o palco principal.
         primaryStage.setScene(scene);
-        // Define o título do palco principal.
-        primaryStage.setTitle("Sudoku Solver");
+        
         // Exibe o palco principal.
         primaryStage.show();
     }

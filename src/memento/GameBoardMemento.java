@@ -1,3 +1,4 @@
+package memento;
 // A classe GameBoardMemento é responsável por armazenar um estado do tabuleiro do jogo.
 public class GameBoardMemento {
 

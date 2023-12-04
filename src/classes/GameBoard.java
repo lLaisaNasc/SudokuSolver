@@ -1,7 +1,10 @@
+package classes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import memento.*;
+
 
 // A classe GameBoard é responsável por gerenciar o tabuleiro do jogo.
 public class GameBoard {
