@@ -150,6 +150,4 @@ public class GameBoard {
             board[row][col] = 0;
         }
     }
-
-    
 }

@@ -18,12 +18,12 @@ import classes.*;
 // A classe SudokuSolverGUI é responsável por criar a interface gráfica do usuário para o jogo de Sudoku.
 public class SudokuSolverGUI {
 
-     // Usa o GameBoardBuilder para construir uma instância de GameBoard(O tabuleiro do jogo).
-        GameBoard gameBoard = new GameBoardBuilder()
-        .size(9)  // Define o tamanho conforme necessário.
-        .board(new int[9][9])  // Passa um tabuleiro inicial, se necessário.
-        .caregiver(new Caregiver())  // Passa um cuidador inicial, se necessário.
-        .build();
+    // Usa o GameBoardBuilder para construir uma instância de GameBoard(O tabuleiro do jogo).
+    GameBoard gameBoard = new GameBoardBuilder()
+            .size(9) // Define o tamanho conforme necessário.
+            .board(new int[9][9]) // Passa um tabuleiro inicial, se necessário.
+            .caregiver(new Caregiver()) // Passa um cuidador inicial, se necessário.
+            .build();
 
     // O número selecionado pelo usuário.
     private String selectedNumber = null;
@@ -55,6 +55,18 @@ public class SudokuSolverGUI {
                 }
             }
         }
+    }
+
+    // Este método verifica se todas as células do tabuleiro estão preenchidas.
+    private boolean isBoardFullyFilled() {
+        for (int row = 0; row < gameBoard.getSize(); row++) {
+            for (int col = 0; col < gameBoard.getSize(); col++) {
+                if (gameBoard.getNumberAt(row, col) == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // Este método limpa o destaque de uma célula no tabuleiro do jogo na interface
@@ -93,6 +105,11 @@ public class SudokuSolverGUI {
         }
     }
 
+    private void clearCellHighlightAndColor(GridPane root, int row, int col) {
+        Button button = (Button) getNodeByRowColumnIndex(row, col, root);
+        button.setStyle(button.getStyle().replace("-fx-background-color: #ffcc00;", ""));
+    }
+
     // Este método exibe uma janela de diálogo quando o usuário resolve o
     // quebra-cabeça.
     public void winnerBoard() {
@@ -123,9 +140,6 @@ public class SudokuSolverGUI {
         winnerStage.showAndWait();
     }
 
-    
-
-    
     public void Jogar(int opcao) {
         Stage primaryStage = new Stage();
 
@@ -172,6 +186,10 @@ public class SudokuSolverGUI {
                                             + "-fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-size: 20px;");
                             selectedRow = row;
                             selectedColumn = col;
+
+                            if (isBoardFullyFilled()) {
+                                winnerBoard();
+                            }
                         } else {
                             System.out.println("Número em uma posição inválida!");
 
@@ -208,6 +226,13 @@ public class SudokuSolverGUI {
         solveButton.setOnAction(e -> {
             gameBoard.solvePuzzle();
             if (gameBoard.solvePuzzle()) {
+
+                // Limpar a cor da célula destacada
+                if (selectedRow != -1 && selectedColumn != -1) {
+                    clearCellHighlightAndColor(root, selectedRow, selectedColumn);
+                    selectedRow = -1;
+                    selectedColumn = -1;
+                }
                 updateBoard(root);
                 winnerBoard();
             } else {
@@ -224,6 +249,14 @@ public class SudokuSolverGUI {
                 "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
         undoButton.setOnAction(e -> {
             gameBoard.undoBoard();
+
+            // Limpar a cor da célula destacada
+            if (selectedRow != -1 && selectedColumn != -1) {
+                clearCellHighlightAndColor(root, selectedRow, selectedColumn);
+                selectedRow = -1;
+                selectedColumn = -1;
+            }
+
             updateBoard(root);
         });
 
@@ -270,13 +303,13 @@ public class SudokuSolverGUI {
             }
         });
 
-        if(opcao == 1){
-           menuPane.add(solveButton, 0, 0);
+        if (opcao == 1) {
+            menuPane.add(solveButton, 0, 0);
             menuPane.add(undoButton, 1, 0);
-            menuPane.add(resetButton, 2, 0); 
+            menuPane.add(resetButton, 2, 0);
             // Define o título do palco principal.
             primaryStage.setTitle("Sudoku Solver");
-        }else if(opcao == 2){
+        } else if (opcao == 2) {
             menuPane.add(undoButton, 1, 0);
             menuPane.add(randomButton, 0, 0);
             menuPane.add(resetButton, 2, 0);
@@ -292,7 +325,6 @@ public class SudokuSolverGUI {
                 selectedColumn = -1;
             }
         }
-        
 
         for (int i = 1; i <= 9; i++) {
             Button numberButton = new Button(Integer.toString(i));
@@ -330,7 +362,7 @@ public class SudokuSolverGUI {
 
         // Define a cena para o palco principal.
         primaryStage.setScene(scene);
-        
+
         // Exibe o palco principal.
         primaryStage.show();
     }
