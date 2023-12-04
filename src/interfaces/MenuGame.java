@@ -1,25 +1,46 @@
 package interfaces;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MenuGame {
+
     public void InterfaceMenu(SudokuSolverGUI sudoku) {
         // Cria uma nova janela de diálogo.
         Stage menu = new Stage();
         // Create the main stage
         menu.setTitle("Sudoku Solver Menu");
-        
+
+        Image icon = new Image("/img/icon.png");
+        menu.getIcons().add(icon);
+
 
         // Create buttons for the menu
-        Button sudokuSolverButton = createMenuButton("Sudoku Solver");
-        Button randomGameButton = createMenuButton("Random Game");
-        Button exitButton = createMenuButton("Exit");
-        
+        Button sudokuSolverButton = createMenuButton("");
+        Button randomGameButton = createMenuButton("");
+        Button exitButton = createMenuButton("");
+
+        // Set the background of the buttons and their text to be transparent
+        sudokuSolverButton.setStyle("-fx-background-color: transparent;");
+        randomGameButton.setStyle("-fx-background-color: transparent;");
+        exitButton.setStyle("-fx-background-color: transparent;");
+
+        // Set the size of each button
+        sudokuSolverButton.setMinSize(200, 50); // Width, Height
+        randomGameButton.setMinSize(200, 50);
+        exitButton.setMinSize(200, 50);
+
+
 
         // Add actions to the menu buttons
         sudokuSolverButton.setOnAction(e -> {
@@ -34,18 +55,29 @@ public class MenuGame {
 
         exitButton.setOnAction(e -> menu.close());
 
-
-        Label mainMenuLabel = new Label("MAIN MENU");
-        mainMenuLabel.setStyle("-fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-size: 24px;");
-
         // Create a layout for the menu
         VBox menuLayout = new VBox(40);
         menuLayout.setAlignment(Pos.CENTER);
-        menuLayout.getChildren().addAll(mainMenuLabel ,sudokuSolverButton, randomGameButton, exitButton);
+
+        // Adiciona um espaçamento no topo para posicionar os botões um pouco acima da metade
+        menuLayout.setPadding(new Insets(100, 0, 0, 0)); // 50 pixels de espaçamento no topo
+
+        menuLayout.getChildren().addAll( sudokuSolverButton, randomGameButton, exitButton);
+
+        // Set the background image for the menu
+        Image bg = new Image("/img/menu.png");
+        BackgroundImage backgroundImage = new BackgroundImage(
+                bg,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT
+        );
+        Background background = new Background(backgroundImage);
+        menuLayout.setBackground(background);
 
         // Create the scene for the main stage
-        Scene menuScene = new Scene(menuLayout, 400, 450);
-        menuScene.getRoot().setStyle("-fx-background-color: #1c1d27;");
+        Scene menuScene = new Scene(menuLayout, 600, 600);
 
         // Set the scene for the main stage
         menu.setScene(menuScene);
@@ -54,12 +86,10 @@ public class MenuGame {
         menu.show();
     }
 
+    // Helper method to create menu buttons
     private Button createMenuButton(String text) {
         Button button = new Button(text);
-        button.setPrefWidth(160);
-        button.setPrefHeight(40);
-        button.setStyle(
-                "-fx-background-color: #000; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #455ab0;");
+        button.setStyle("-fx-background-color: transparent; -fx-text-fill: transparent;");
         return button;
     }
 }
