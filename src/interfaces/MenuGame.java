@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 public class MenuGame {
 
     public void InterfaceMenu(SudokuSolverGUI sudoku) {
-        // Cria uma nova janela de diálogo.
         Stage menu = new Stage();
         // Create the main stage
         menu.setTitle("Sudoku Solver Menu");
@@ -59,8 +58,7 @@ public class MenuGame {
         VBox menuLayout = new VBox(40);
         menuLayout.setAlignment(Pos.CENTER);
 
-        // Adiciona um espaçamento no topo para posicionar os botões um pouco acima da metade
-        menuLayout.setPadding(new Insets(100, 0, 0, 0)); // 50 pixels de espaçamento no topo
+        menuLayout.setPadding(new Insets(100, 0, 0, 0)); 
 
         menuLayout.getChildren().addAll( sudokuSolverButton, randomGameButton, exitButton);
 

@@ -143,6 +143,7 @@ public class SudokuSolverGUI {
     }
 
     public void Jogar(int opcao) {
+        gameBoard.resetBoard();
         Stage primaryStage = new Stage();
         Image icon = new Image("/img/icon.png");
         primaryStage.getIcons().add(icon);
@@ -308,6 +309,7 @@ public class SudokuSolverGUI {
         });
 
         if (opcao == 1) {
+            
             menuPane.add(solveButton, 0, 0);
             menuPane.add(undoButton, 1, 0);
             menuPane.add(resetButton, 2, 0);
