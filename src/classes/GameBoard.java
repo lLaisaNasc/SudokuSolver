@@ -10,7 +10,7 @@ import memento.*;
 public class GameBoard {
 
     // O tamanho do tabuleiro do jogo.
-    private int size = 9;
+    private int size;
     // O tabuleiro do jogo.
     private int[][] board;
     // O objeto Caregiver que armazena os estados anteriores do tabuleiro do jogo.
@@ -20,6 +20,18 @@ public class GameBoard {
     public GameBoard() {
         board = new int[size][size];
         caregiver = new Caregiver();
+    }
+    // Adicione métodos setters para permitir a configuração do tamanho, tabuleiro e cuidador.
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setBoard(int[][] board) {
+        this.board = board;
+    }
+
+    public void setCaregiver(Caregiver caregiver) {
+        this.caregiver = caregiver;
     }
 
     // Este método retorna o tamanho do tabuleiro do jogo.
@@ -138,4 +150,6 @@ public class GameBoard {
             board[row][col] = 0;
         }
     }
+
+    
 }

@@ -12,13 +12,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import memento.Caregiver;
 import classes.*;
 
 // A classe SudokuSolverGUI é responsável por criar a interface gráfica do usuário para o jogo de Sudoku.
 public class SudokuSolverGUI {
 
-    // O tabuleiro do jogo.
-    GameBoard gameBoard = new GameBoard();
+     // Usa o GameBoardBuilder para construir uma instância de GameBoard(O tabuleiro do jogo).
+        GameBoard gameBoard = new GameBoardBuilder()
+        .size(9)  // Define o tamanho conforme necessário.
+        .board(new int[9][9])  // Passa um tabuleiro inicial, se necessário.
+        .caregiver(new Caregiver())  // Passa um cuidador inicial, se necessário.
+        .build();
+
     // O número selecionado pelo usuário.
     private String selectedNumber = null;
     // A linha e coluna selecionadas pelo usuário.
