@@ -115,6 +115,8 @@ public class SudokuSolverGUI {
     public void winnerBoard() {
         // Cria uma nova janela de diálogo.
         Stage winnerStage = new Stage();
+        Image icon = new Image("/img/icon.png");
+        winnerStage.getIcons().add(icon);
         // Define a janela de diálogo como modal.
         winnerStage.initModality(Modality.APPLICATION_MODAL);
 
@@ -142,6 +144,8 @@ public class SudokuSolverGUI {
 
     public void Jogar(int opcao) {
         Stage primaryStage = new Stage();
+        Image icon = new Image("/img/icon.png");
+        primaryStage.getIcons().add(icon);
 
         // Cria um VBox para conter todos os elementos da interface gráfica.
         VBox vbox = new VBox(40);
